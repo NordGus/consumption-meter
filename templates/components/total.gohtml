@@ -1,5 +1,9 @@
 {{ block "total" . }}
-    <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] text-center" hx-swap-oob="true">
+    <h1
+            id="timings-total"
+            class="text-[3.2rem] leading-[1.1] text-center {{ if lt .TotalTime 0 }}text-red-500{{ end }} {{ if gt .TotalTime 0 }}text-green-500{{ end }}"
+            hx-swap-oob="true"
+    >
         {{ humanizeDuration .TotalTime }}
     </h1>
 {{ end }}
