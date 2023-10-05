@@ -1,0 +1,7 @@
+{{ define "timings" }}
+    <div id="timings" class="hidden my-auto">
+        {{ range $timing := .Timings }}
+            {{ template "timing" $timing }}
+        {{ end }}
+    </div>
+{{ end }}

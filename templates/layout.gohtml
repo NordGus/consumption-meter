@@ -1,15 +1,17 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Consumption-O-Meter</title>
-    </head>
-    <body
-            class="m-0 flex flex-col h-screen bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100"
-    >
-        {{ template "timer-component" . }}
-        <script type="module" src="http://localhost:5173/client/application.ts"></script>
-    </body>
-</html>
+{{ define "layout" }}
+    <!doctype html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Consumption-O-Meter</title>
+        </head>
+        <body
+                class="m-0 flex flex-col h-screen bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100"
+        >
+            {{ template "timer-component" . }}
+            <script type="module" src="http://localhost:5173/client/application.ts"></script>
+        </body>
+    </html>
+{{ end }}
