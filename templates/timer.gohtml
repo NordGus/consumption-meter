@@ -1,9 +1,18 @@
-<timer-component id="app" class="flex-1 p-5 flex flex-col justify-between max-w-[420px]">
+<timer-component id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
     <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] text-center">00:00:00.000</h1>
-    <div id="view" class="flex-1 my-10 flex flex-col justify-center items-center">
-        <h2 id="timer" class="text-[2.1rem] leading-[1.1] text-center">Pick your poison</h2>
-        <div id="timings" class="hidden flex-1">
-            test
+    <div id="view" class="my-10 flex flex-col overflow-auto">
+        <h2 id="timer" class="text-[2.1rem] leading-[1.1] m-auto justify-self-center">Pick your poison</h2>
+        <div id="timings" class="hidden my-auto">
+            <div class="text-[2.1rem]">test 1</div>
+            <div class="text-[2.1rem]">test 2</div>
+            <div class="text-[2.1rem]">test 3</div>
+            <div class="text-[2.1rem]">test 4</div>
+            <div class="text-[2.1rem]">test 5</div>
+            <div class="text-[2.1rem]">test 6</div>
+            <div class="text-[2.1rem]">test 7</div>
+            <div class="text-[2.1rem]">test 8</div>
+            <div class="text-[2.1rem]">test 9</div>
+            <div class="text-[2.1rem]">test 10</div>
         </div>
     </div>
     <div class="flex flex-row justify-around items-center">
@@ -24,7 +33,7 @@
                         hover:bg-slate-700 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
                         focus:outline-[-webkit-focus-ring-color] focus-visible:outline-[-webkit-focus-ring-color]
                         drop-shadow-lg"
-        >Toggle</button>
+        >+</button>
         <button
                 type="button"
                 id="produce"
