@@ -360,7 +360,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^6.7.4":
+"@typescript-eslint/eslint-plugin@npm:6.7.4":
   version: 6.7.4
   resolution: "@typescript-eslint/eslint-plugin@npm:6.7.4"
   dependencies:
@@ -385,7 +385,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^6.7.4":
+"@typescript-eslint/parser@npm:6.7.4":
   version: 6.7.4
   resolution: "@typescript-eslint/parser@npm:6.7.4"
   dependencies:
@@ -836,6 +836,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"consuption-meter@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "consuption-meter@workspace:."
+  dependencies:
+    "@typescript-eslint/eslint-plugin": 6.7.4
+    "@typescript-eslint/parser": 6.7.4
+    autoprefixer: 10.4.16
+    eslint: 8.50.0
+    htmx.org: 1.9.6
+    postcss: 8.4.31
+    prettier: 3.0.3
+    tailwindcss: 3.3.3
+    typescript: 5.2.2
+    vite: 4.4.10
+  languageName: unknown
+  linkType: soft
+
 "cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
@@ -1073,7 +1090,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.50.0":
+"eslint@npm:8.50.0":
   version: 8.50.0
   resolution: "eslint@npm:8.50.0"
   dependencies:
@@ -2389,23 +2406,6 @@ __metadata:
   checksum: 8bb20a39c8d91130825159c3823eccf4dc2295c9a0a5c4ed851a5bf2167dbf24d9a29f23461a54c955e5506395e6cc188eafc8ab0e20399d7489fb33793b184e
   languageName: node
   linkType: hard
-
-"rom-stack@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "rom-stack@workspace:."
-  dependencies:
-    "@typescript-eslint/eslint-plugin": ^6.7.4
-    "@typescript-eslint/parser": ^6.7.4
-    autoprefixer: 10.4.16
-    eslint: ^8.50.0
-    htmx.org: 1.9.6
-    postcss: 8.4.31
-    prettier: 3.0.3
-    tailwindcss: 3.3.3
-    typescript: 5.2.2
-    vite: 4.4.10
-  languageName: unknown
-  linkType: soft
 
 "run-parallel@npm:^1.1.9":
   version: 1.2.0

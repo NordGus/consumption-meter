@@ -1,5 +1,5 @@
 {
-  "name": "rom-stack",
+  "name": "consuption-meter",
   "packageManager": "yarn@3.6.4",
   "version": "0.0.1",
   "private": true,
