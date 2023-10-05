@@ -1,0 +1,9 @@
+*.go
+
+build
+dist
+public
+server
+.yarn
+
+.pnp.*
