@@ -34,7 +34,8 @@ class TimerTriggerComponent extends HTMLButtonElement {
   }
 
   onTriggerTimer(event: TriggerTimerEvent): void {
-    this.disabled = event.detail.action !== this.triggerType;
+    if (event.detail.trigger === "stop") this.disabled = false;
+    else this.disabled = event.detail.action !== this.triggerType;
   }
 }
 
