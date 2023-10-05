@@ -42,12 +42,21 @@ class TimerComponent extends HTMLElement {
   connectedCallback(): void {
     const consume = this.querySelector<HTMLButtonElement>("#consume");
     const produce = this.querySelector<HTMLButtonElement>("#produce");
+    const toggle = this.querySelector<HTMLButtonElement>("#toggle");
+
+    const view = this.querySelector<HTMLButtonElement>("#view");
+    const timings = this.querySelector<HTMLButtonElement>("#timings");
     this.timer = this.querySelector<HTMLElement>("#timer")!;
 
-    if (!consume || !produce) return;
+    if (!consume || !produce || !toggle || !timings || !view) return;
 
     this.swapOnClick(consume, "Consume", produce);
     this.swapOnClick(produce, "Produce", consume);
+
+    toggle.addEventListener("click", () => {
+      this.timer.classList.toggle("hidden");
+      timings.classList.toggle("hidden");
+    });
   }
 
   swapOnClick(elem: HTMLButtonElement, name: string, other: HTMLButtonElement): void {
