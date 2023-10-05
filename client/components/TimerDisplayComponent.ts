@@ -25,7 +25,7 @@ class TimerDisplayComponent extends HTMLElement {
   startTimer(name: string): void {
     const start = Date.now();
 
-    this.classList.toggle("text-green-600", name === "produce");
+    this.classList.toggle("text-green-600", name === "create");
     this.classList.toggle("text-red-600", name === "consume");
 
     this.timerId = setInterval(() => {

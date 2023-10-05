@@ -11,7 +11,7 @@ type Action int
 
 const (
 	Consume Action = iota
-	Produce
+	Create
 )
 
 type Page struct {

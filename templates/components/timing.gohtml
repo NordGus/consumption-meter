@@ -1,7 +1,7 @@
 {{ block "timing" . }}
     <div class="grid grid-cols-2 py-1 px-2.5 rounded-md bg-stone-700 items-center justify-center text-lg mb-1 drop-shadow-lg">
         <div>{{ formatTime .Start }}</div>
-        <div class="{{ if produces . }}text-green-500{{ else }}text-red-500{{end}} text-right">
+        <div class="{{ if creates . }}text-green-500{{ else }}text-red-500{{end}} text-right">
             {{ if eq .Duration 0 }} Running {{ else }} {{ humanizeDuration .Duration }} {{ end }}
         </div>
     </div>

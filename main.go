@@ -28,7 +28,7 @@ var (
 	}
 
 	helpers = template.FuncMap{
-		"produces":   func(timing timings.Timing) bool { return timing.Type == timings.Produce },
+		"creates":    func(timing timings.Timing) bool { return timing.Type == timings.Create },
 		"formatTime": func(t time.Time) string { return t.Format("02/01/06 - 15:04:05") },
 		"humanizeDuration": func(d time.Duration) string {
 			var (
@@ -86,8 +86,8 @@ func main() {
 		}
 	})
 
-	router.Post("/produce", func(writer http.ResponseWriter, _ *http.Request) {
-		handleTiming(writer, timings.Produce)
+	router.Post("/create", func(writer http.ResponseWriter, _ *http.Request) {
+		handleTiming(writer, timings.Create)
 	})
 
 	router.Post("/consume", func(writer http.ResponseWriter, _ *http.Request) {

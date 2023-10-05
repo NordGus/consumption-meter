@@ -44,18 +44,18 @@
             >D</button>
             <button
                     is="timer-trigger"
-                    hx-post="/produce"
+                    hx-post="/create"
                     hx-target="#timings"
                     hx-swap="outerHTML"
                     type="button"
-                    id="produceTrigger"
-                    data-action="produce"
+                    id="createTrigger"
+                    data-action="create"
                     class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
                         bg-green-500 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
                         hover:bg-green-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
                         focus:outline-[-webkit-focus-ring-color] focus-visible:outline-[-webkit-focus-ring-color]
                         drop-shadow-lg min-w-[100px] disabled:bg-green-300 disabled:text-neutral-900 disabled:cursor-not-allowed"
-            >Produce</button>
+            >Create</button>
         </div>
     </div>
 {{ end }}
