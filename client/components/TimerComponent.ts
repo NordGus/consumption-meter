@@ -1,35 +1,4 @@
-function humanTime(ms: number): string {
-  const mils = ms % 1000;
-  const out = [];
-
-  ms = Math.floor(ms / 1000);
-
-  if (ms > 0 && ms % 60 < 10) {
-    out.push(`0${ms % 60}.${mils}`);
-  } else if (ms > 0) {
-    out.push(`${ms % 60}.${mils}`);
-  } else {
-    out.push(`00.${mils}`);
-  }
-
-  ms = Math.floor(ms / 60);
-
-  if (ms > 0 && ms % 60 < 10) {
-    out.push(`0${ms % 60}`);
-  } else if (ms > 0) {
-    out.push(`${ms % 60}`);
-  }
-
-  ms = Math.floor(ms / 60);
-
-  if (ms > 0 && ms < 10) {
-    out.push(`0${ms}`);
-  } else if (ms > 0) {
-    out.push(`${ms}`);
-  }
-
-  return out.reverse().join(":");
-}
+import { humanizeTime } from "../helpers/humanizeTime.ts";
 
 class TimerComponent extends HTMLElement {
   private timer!: HTMLElement;
@@ -43,19 +12,20 @@ class TimerComponent extends HTMLElement {
     const consume = this.querySelector<HTMLButtonElement>("#consume");
     const produce = this.querySelector<HTMLButtonElement>("#produce");
     const toggle = this.querySelector<HTMLButtonElement>("#toggle");
+    const tabs = this.querySelectorAll<HTMLElement>("#tab");
 
     this.timer = this.querySelector<HTMLElement>("#timer")!;
 
-    if (!consume || !produce || !toggle) return;
+    if (!consume || !produce || !toggle || !tabs) return;
 
     this.swapOnClick(consume, "Consume", produce);
     this.swapOnClick(produce, "Produce", consume);
 
     toggle.addEventListener("click", () => {
-      const timings = this.querySelector<HTMLButtonElement>("#timings")!;
-
-      this.timer.classList.toggle("hidden");
-      timings.classList.toggle("hidden");
+      for (const tab of tabs) {
+        tab.classList.toggle("flex");
+        tab.classList.toggle("hidden");
+      }
     });
   }
 
@@ -85,7 +55,7 @@ class TimerComponent extends HTMLElement {
     const start = Date.now();
 
     this.timerId = setInterval(() => {
-      this.timer.innerText = humanTime(Date.now() - start);
+      this.timer.innerText = humanizeTime(Date.now() - start);
     }, 20);
   }
 

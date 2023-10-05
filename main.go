@@ -90,35 +90,11 @@ func main() {
 	})
 
 	router.Post("/produce", func(writer http.ResponseWriter, _ *http.Request) {
-		if timings.CanCreateTiming() {
-			_ = timings.CreateTiming(timings.Produce)
-		} else if timings.CanStopTiming(timings.Produce) {
-			err := timings.StopTiming()
-			if err != nil {
-				log.Println(err)
-				http.Error(writer, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		} else {
-			log.Println(timings.ErrInvalidAction)
-			http.Error(writer, timings.ErrInvalidAction.Error(), http.StatusInternalServerError)
-			return
-		}
+		handleTiming(writer, timings.Produce)
+	})
 
-		page := timings.NewPage()
-
-		tmpl, err := template.New("timings").Funcs(helpers).ParseFS(templates, templatePatterns...)
-		if err != nil {
-			log.Println(err)
-			http.Error(writer, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		err = page.Render(writer, tmpl, "timings")
-		if err != nil {
-			log.Println(err)
-			http.Error(writer, err.Error(), http.StatusInternalServerError)
-		}
+	router.Post("/consume", func(writer http.ResponseWriter, _ *http.Request) {
+		handleTiming(writer, timings.Consume)
 	})
 
 	err := http.ListenAndServe(":4269", router)
@@ -133,4 +109,36 @@ func devCORSMiddleware(next http.Handler) http.Handler {
 
 		next.ServeHTTP(writer, request)
 	})
+}
+
+func handleTiming(writer http.ResponseWriter, action timings.Action) {
+	if timings.CanCreateTiming() {
+		_ = timings.CreateTiming(action)
+	} else if timings.CanStopTiming(action) {
+		err := timings.StopTiming()
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		log.Println(timings.ErrInvalidAction)
+		http.Error(writer, timings.ErrInvalidAction.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	page := timings.NewPage()
+
+	tmpl, err := template.New("timings").Funcs(helpers).ParseFS(templates, templatePatterns...)
+	if err != nil {
+		log.Println(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = page.Render(writer, tmpl, "timings")
+	if err != nil {
+		log.Println(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+	}
 }

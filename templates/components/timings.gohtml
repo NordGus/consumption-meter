@@ -1,7 +1,11 @@
 {{ define "timings" }}
-    <div id="timings" class="hidden my-auto">
-        {{ range $timing := .Timings }}
-            {{ template "timing" $timing }}
+    <div id="timings" class="my-auto">
+        {{ if eq (len .Timings) 0 }}
+            <h2 class="text-2xl m-auto text-center">No Timings</h2>
+        {{ else }}
+            {{ range $timing := .Timings }}
+                {{ template "timing" $timing }}
+            {{ end }}
         {{ end }}
     </div>
 {{ end }}

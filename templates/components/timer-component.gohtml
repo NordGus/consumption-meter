@@ -1,12 +1,17 @@
 {{ define "timer-component" }}
     <timer-component id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
         <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] text-center">00:00:00.000</h1>
-        <div id="view" class="my-10 flex flex-col overflow-auto">
+        <div id="tab" class="my-10 flex flex-col">
             {{ template "timer" . }}
+        </div>
+        <div id="tab" class="my-10 flex-col overflow-auto hidden">
             {{ template "timings" . }}
         </div>
         <div class="flex flex-row justify-around items-center">
             <button
+                    hx-post="/consume"
+                    hx-target="#timings"
+                    hx-swap="outerHTML"
                     type="button"
                     id="consume"
                     class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
@@ -19,8 +24,8 @@
                     type="button"
                     id="toggle"
                     class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
-                        bg-slate-900 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
-                        hover:bg-slate-700 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
+                        bg-stone-700 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
+                        hover:bg-stone-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
                         focus:outline-[-webkit-focus-ring-color] focus-visible:outline-[-webkit-focus-ring-color]
                         drop-shadow-lg"
             >+</button>
