@@ -20,7 +20,7 @@ var (
 
 	templatePatterns = []string{
 		"templates/layout.gohtml",
-		"templates/components/timer-component.gohtml",
+		"templates/components/timer-app.gohtml",
 		"templates/components/timings.gohtml",
 		"templates/components/timing.gohtml",
 		"templates/components/timer.gohtml",
@@ -32,7 +32,7 @@ var (
 		"formatTime": func(t time.Time) string { return t.Format("02/01/06 - 15:04:05") },
 		"humanizeDuration": func(d time.Duration) string {
 			var (
-				ms  = d.Milliseconds()
+				ms  = abs(d.Milliseconds())
 				mil = ms % 1000
 				out = make([]string, 0, 3)
 			)
@@ -42,36 +42,29 @@ var (
 			}
 
 			ms = ms / 1000
+			out = append(out, fmt.Sprintf("%02d.%03d", ms%60, mil))
 
-			if ms > 0 && ms%60 < 10 {
-				out = append(out, fmt.Sprintf("0%d.%d", ms%60, mil))
-			} else if ms > 0 {
-				out = append(out, fmt.Sprintf("%d.%d", ms%60, mil))
-			} else {
-				out = append(out, fmt.Sprintf("00.%d", mil))
+			ms = ms / 60
+			if ms > 0 {
+				out = append(out, fmt.Sprintf("%02d", ms%60))
 			}
 
 			ms = ms / 60
-
-			if ms > 0 && ms%60 < 10 {
-				out = append(out, fmt.Sprintf("0%d", ms%60))
-			} else if ms > 0 {
-				out = append(out, fmt.Sprintf("%d", ms%60))
-			}
-
-			ms = ms / 60
-
-			if ms > 0 && ms < 10 {
-				out = append(out, fmt.Sprintf("0%d", ms))
-			} else if ms > 0 {
-				out = append(out, fmt.Sprintf("%d", ms))
+			if ms > 0 {
+				out = append(out, fmt.Sprintf("%+02d", ms))
 			}
 
 			slices.Reverse(out)
 
-			return strings.Join(out, ":")
+			if d.Milliseconds() > 0 {
+				return strings.Join(out, ":")
+			}
+
+			return fmt.Sprintf("-%s", strings.Join(out, ":"))
 		},
 	}
+
+	timingsPage = timings.NewPage()
 )
 
 func main() {
@@ -80,15 +73,13 @@ func main() {
 	router.Use(devCORSMiddleware)
 
 	router.Get("/", func(writer http.ResponseWriter, _ *http.Request) {
-		page := timings.NewPage()
-
 		tmpl, err := template.New("layout").Funcs(helpers).ParseFS(templates, templatePatterns...)
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = page.Render(writer, tmpl, "layout")
+		err = timingsPage.Render(writer, tmpl, "layout")
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}
@@ -117,38 +108,90 @@ func devCORSMiddleware(next http.Handler) http.Handler {
 }
 
 func handleTiming(writer http.ResponseWriter, action timings.Action) {
-	if timings.CanCreateTiming() {
-		_ = timings.CreateTiming(action)
-	} else if timings.CanStopTiming(action) {
-		err := timings.StopTiming()
+	timingsPage.Lock()
+	defer timingsPage.Unlock()
+
+	if timingsPage.CanCreateTiming() {
+		timingsPage.CreateTiming(action)
+
+		tmpl, err := template.New("timings").Funcs(helpers).ParseFS(templates, templatePatterns...)
 		if err != nil {
 			log.Println(err)
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else {
-		log.Println(timings.ErrInvalidAction)
-		http.Error(writer, timings.ErrInvalidAction.Error(), http.StatusInternalServerError)
+
+		err = timingsPage.Render(writer, tmpl, "timings")
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		return
 	}
 
-	page := timings.NewPage()
+	if timingsPage.CanStopTiming(action) {
+		err := timingsPage.StopTiming()
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	tmpl, err := template.New("timings").Funcs(helpers).ParseFS(templates, templatePatterns...)
-	if err != nil {
-		log.Println(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		tmpl, err := template.New("timings").Funcs(helpers).ParseFS(templates, templatePatterns...)
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = timingsPage.Render(writer, tmpl, "timings")
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		tmpl, err = template.New("total").Funcs(helpers).ParseFS(templates, templatePatterns...)
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = timingsPage.Render(writer, tmpl, "total")
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		tmpl, err = template.New("timer").Funcs(helpers).ParseFS(templates, templatePatterns...)
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = timingsPage.Render(writer, tmpl, "timer")
+		if err != nil {
+			log.Println(err)
+			http.Error(writer, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		return
 	}
 
-	err = page.Render(writer, tmpl, "timings")
-	if err != nil {
-		log.Println(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
-		return
+	log.Println(timings.ErrInvalidAction)
+	http.Error(writer, timings.ErrInvalidAction.Error(), http.StatusInternalServerError)
+}
+
+func abs[T int64](num T) T {
+	if num < 0 {
+		return -num
 	}
 
-	if timings.CanStopTiming(action) {
-		return
-	}
+	return num
 }

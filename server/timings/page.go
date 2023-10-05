@@ -3,27 +3,45 @@ package timings
 import (
 	"html/template"
 	"net/http"
+	"sync"
 	"time"
 )
 
+type Action int
+
+const (
+	Consume Action = iota
+	Produce
+)
+
 type Page struct {
-	Timings   []Timing
+	timings   []Timing
 	TotalTime time.Duration
+
+	isRunning bool
+	timingID  uint64
+
+	sync.RWMutex
 }
 
-func NewPage() Page {
+func NewPage() *Page {
 	p := Page{
-		Timings:   timings,
+		timings:   make([]Timing, 0, 10),
 		TotalTime: 0,
+		timingID:  1,
 	}
 
-	p.calculateTotalTime()
+	p.CalculateTotalTime()
 
-	return p
+	return &p
 }
 
-func (page *Page) calculateTotalTime() {
-	for _, timing := range page.Timings {
+func (page *Page) GetTimings() []Timing {
+	return page.timings
+}
+
+func (page *Page) CalculateTotalTime() {
+	for _, timing := range page.timings {
 		if timing.Type == Consume {
 			page.TotalTime -= timing.Duration
 		} else {

@@ -17,7 +17,15 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Paths */
+    "baseUrl": "./client",
+    "paths": {
+      "@/*": ["./*"],
+      "@Components/*": ["components/*"],
+      "@Helpers/*": ["helpers/*"]
+    }
   },
   "include": ["client"]
 }

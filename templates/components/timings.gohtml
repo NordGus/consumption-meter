@@ -1,9 +1,9 @@
 {{ define "timings" }}
     <div id="timings" class="my-auto">
-        {{ if eq (len .Timings) 0 }}
+        {{ if eq (len .GetTimings) 0 }}
             <h2 class="text-2xl m-auto text-center">No Timings</h2>
         {{ else }}
-            {{ range $timing := .Timings }}
+            {{ range $timing := .GetTimings }}
                 {{ template "timing" $timing }}
             {{ end }}
         {{ end }}

@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "client"),
       "@Components": path.resolve(__dirname, "client/components"),
+      "@Helpers": path.resolve(__dirname, "client/helpers"),
     },
     extensions: [".js", ".jsx", ".ts", ".tsx", ".css"],
   },

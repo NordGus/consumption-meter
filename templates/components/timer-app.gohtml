@@ -1,5 +1,5 @@
-{{ define "timer-component" }}
-    <timer-component id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
+{{ define "timer-app" }}
+    <div id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
         {{ template "total" . }}
         <div id="tab" class="my-10 flex flex-col">
             {{ template "timer" . }}
@@ -9,11 +9,13 @@
         </div>
         <div class="flex flex-row justify-around items-center">
             <button
+                    is="timer-trigger"
                     hx-post="/consume"
                     hx-target="#timings"
                     hx-swap="outerHTML"
                     type="button"
-                    id="consume"
+                    id="consumeTrigger"
+                    data-action="consume"
                     class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
                         bg-red-500 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
                         hover:bg-red-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
@@ -30,11 +32,13 @@
                         drop-shadow-lg"
             >+</button>
             <button
+                    is="timer-trigger"
                     hx-post="/produce"
                     hx-target="#timings"
                     hx-swap="outerHTML"
                     type="button"
-                    id="produce"
+                    id="produceTrigger"
+                    data-action="produce"
                     class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
                         bg-green-500 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
                         hover:bg-green-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
@@ -42,5 +46,5 @@
                         drop-shadow-lg min-w-[100px] disabled:bg-green-300 disabled:text-neutral-900 disabled:cursor-not-allowed"
             >Produce</button>
         </div>
-    </timer-component>
+    </div>
 {{ end }}
