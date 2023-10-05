@@ -41,11 +41,13 @@ func (page *Page) GetTimings() []Timing {
 }
 
 func (page *Page) CalculateTotalTime() {
+	page.TotalTime = 0
+
 	for _, timing := range page.timings {
 		if timing.Type == Consume {
-			page.TotalTime -= timing.Duration
+			page.TotalTime -= timing.Stop.Sub(timing.Start)
 		} else {
-			page.TotalTime += timing.Duration
+			page.TotalTime += timing.Stop.Sub(timing.Start)
 		}
 	}
 }

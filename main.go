@@ -32,13 +32,18 @@ var (
 		"formatTime": func(t time.Time) string { return t.Format("02/01/06 - 15:04:05") },
 		"humanizeDuration": func(d time.Duration) string {
 			var (
-				ms  = abs(d.Milliseconds())
+				ms  = d.Milliseconds()
 				mil = ms % 1000
 				out = make([]string, 0, 3)
 			)
 
 			if ms == 0 {
 				return "0.000"
+			}
+
+			if ms < 0 {
+				ms = -ms
+				mil = -mil
 			}
 
 			ms = ms / 1000
@@ -56,11 +61,7 @@ var (
 
 			slices.Reverse(out)
 
-			if d.Milliseconds() > 0 {
-				return strings.Join(out, ":")
-			}
-
-			return fmt.Sprintf("-%s", strings.Join(out, ":"))
+			return strings.Join(out, ":")
 		},
 	}
 
@@ -186,12 +187,4 @@ func handleTiming(writer http.ResponseWriter, action timings.Action) {
 
 	log.Println(timings.ErrInvalidAction)
 	http.Error(writer, timings.ErrInvalidAction.Error(), http.StatusInternalServerError)
-}
-
-func abs[T int64](num T) T {
-	if num < 0 {
-		return -num
-	}
-
-	return num
 }
