@@ -2,7 +2,6 @@ package timings
 
 import (
 	"errors"
-	"sync"
 	"time"
 )
 
@@ -17,7 +16,7 @@ var (
 	currentTiming *uint64
 	timings              = make([]Timing, 0, 10)
 	timingID      uint64 = 1
-	mutex                = new(sync.Mutex)
+	lock                 = make(chan bool, 1)
 
 	ErrTimingAlreadyStopped = errors.New("timings: timing already stopped")
 	ErrInvalidAction        = errors.New("timings: invalid action")
@@ -32,8 +31,10 @@ type Timing struct {
 }
 
 func CreateTiming(action Action) Timing {
-	mutex.Lock()
-	defer mutex.Unlock()
+	lock <- true
+	defer func() {
+		<-lock
+	}()
 
 	t := Timing{
 		ID:    timingID,
@@ -53,10 +54,20 @@ func CreateTiming(action Action) Timing {
 }
 
 func CanCreateTiming() bool {
+	lock <- true
+	defer func() {
+		<-lock
+	}()
+
 	return currentTiming == nil
 }
 
 func CanStopTiming(action Action) bool {
+	lock <- true
+	defer func() {
+		<-lock
+	}()
+
 	if currentTiming == nil {
 		return false
 	}
@@ -65,8 +76,10 @@ func CanStopTiming(action Action) bool {
 }
 
 func StopTiming() error {
-	mutex.Lock()
-	defer mutex.Unlock()
+	lock <- true
+	defer func() {
+		<-lock
+	}()
 
 	if currentTiming == nil {
 		return ErrTimingAlreadyStopped

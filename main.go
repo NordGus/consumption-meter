@@ -24,6 +24,7 @@ var (
 		"templates/components/timings.gohtml",
 		"templates/components/timing.gohtml",
 		"templates/components/timer.gohtml",
+		"templates/components/total.gohtml",
 	}
 
 	helpers = template.FuncMap{
@@ -35,6 +36,10 @@ var (
 				mil = ms % 1000
 				out = make([]string, 0, 3)
 			)
+
+			if ms == 0 {
+				return "0.000"
+			}
 
 			ms = ms / 1000
 
@@ -140,5 +145,10 @@ func handleTiming(writer http.ResponseWriter, action timings.Action) {
 	if err != nil {
 		log.Println(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if timings.CanStopTiming(action) {
+		return
 	}
 }

@@ -1,0 +1,5 @@
+{{ block "total" . }}
+    <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] text-center" hx-swap-oob="true">
+        {{ humanizeDuration .TotalTime }}
+    </h1>
+{{ end }}

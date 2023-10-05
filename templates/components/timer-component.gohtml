@@ -1,6 +1,6 @@
 {{ define "timer-component" }}
     <timer-component id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
-        <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] text-center">00:00:00.000</h1>
+        {{ template "total" . }}
         <div id="tab" class="my-10 flex flex-col">
             {{ template "timer" . }}
         </div>
