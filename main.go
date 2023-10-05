@@ -1,17 +1,21 @@
 package main
 
 import (
+	"embed"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"html/template"
 	"log"
 	"net/http"
-	"os"
+)
+
+var (
+	//go:embed templates
+	templates embed.FS
 )
 
 func main() {
-	templateFS := os.DirFS("./templates")
-	tmpls, err := template.ParseFS(templateFS, "layout.gohtml", "timer.gohtml")
+	tmpls, err := template.ParseFS(templates, "templates/layout.gohtml", "templates/timer-component.gohtml", "templates/timings.gohtml", "templates/timing.gohtml", "templates/timer.gohtml")
 	if err != nil {
 		log.Fatalf("something went wrong parsing templates: %v\n", err)
 	}
@@ -22,13 +26,6 @@ func main() {
 
 	router.Get("/", func(writer http.ResponseWriter, _ *http.Request) {
 		err := tmpls.ExecuteTemplate(writer, "layout.gohtml", nil)
-		if err != nil {
-			http.Error(writer, err.Error(), http.StatusInternalServerError)
-		}
-	})
-
-	router.Get("/app", func(writer http.ResponseWriter, _ *http.Request) {
-		err := tmpls.ExecuteTemplate(writer, "timer.gohtml", nil)
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}

@@ -9,9 +9,7 @@
     <body
             class="m-0 flex flex-col h-screen bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100"
     >
-        <div id="app" hx-get="/app" hx-trigger="load" hx-swap="outerHTML">
-            Loading
-        </div>
+        {{ template "timer-component" . }}
         <script type="module" src="http://localhost:5173/client/application.ts"></script>
     </body>
 </html>
