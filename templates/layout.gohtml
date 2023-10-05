@@ -4,14 +4,14 @@
         <meta charset="UTF-8" />
         <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Vite + TS</title>
+        <title>Consumption-O-Meter</title>
     </head>
-    <body class="m-0 flex place-items-center min-w-[320px] min-h-[100vh] bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100">
-        <div
-                id="app"
-                class="my-0 mx-auto p-[2rem] text-center max-w-[1280px]"
-        >
-            <p hx-get="/app" hx-trigger="load" hx-target="#app">Loading</p>
+    <body
+            class="m-0 flex flex-row items-center place-items-center min-w-[320px] min-h-[100vh] max-h-[100vh]
+                bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100"
+    >
+        <div id="app" hx-get="/app" hx-trigger="load" hx-swap="outerHTML">
+            Loading
         </div>
         <script type="module" src="http://localhost:5173/client/application.ts"></script>
     </body>

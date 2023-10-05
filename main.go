@@ -11,7 +11,7 @@ import (
 
 func main() {
 	templateFS := os.DirFS("./templates")
-	tmpls, err := template.ParseFS(templateFS, "layout.gohtml", "app.gohtml")
+	tmpls, err := template.ParseFS(templateFS, "layout.gohtml", "timer.gohtml")
 	if err != nil {
 		log.Fatalf("something went wrong parsing templates: %v\n", err)
 	}
@@ -28,7 +28,7 @@ func main() {
 	})
 
 	router.Get("/app", func(writer http.ResponseWriter, _ *http.Request) {
-		err := tmpls.ExecuteTemplate(writer, "app.gohtml", nil)
+		err := tmpls.ExecuteTemplate(writer, "timer.gohtml", nil)
 		if err != nil {
 			http.Error(writer, err.Error(), http.StatusInternalServerError)
 		}

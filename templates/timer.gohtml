@@ -1,0 +1,24 @@
+<timer-component id="app" class="m-auto p-[2rem] text-center flex flex-col justify-center items-center w-[420px]">
+    <h1 id="timings-total" class="text-[3.2rem] leading-[1.1] mb-10">00:00:00.000</h1>
+    <h2 id="timer" class="text-[2.1rem] leading-[1.1] mb-10">Pick your poison</h2>
+    <div class="flex flex-row justify-around items-center flex-grow w-[60vw]">
+        <button
+                type="button"
+                id="consume"
+                class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
+                        bg-red-500 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
+                        hover:bg-red-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
+                        focus:outline-[-webkit-focus-ring-color] focus-visible:outline-[-webkit-focus-ring-color]
+                        drop-shadow-lg min-w-[100px] disabled:bg-red-300 disabled:text-neutral-900 disabled:cursor-not-allowed"
+        >Consume</button>
+        <button
+                type="button"
+                id="produce"
+                class="rounded-[8px] border-[1px] border-transparent py-[0.6em] px-[1.2em] text-[1em] font-medium
+                        bg-green-500 text-neutral-100 cursor-pointer transition-[background-color] duration-[0.50s]
+                        hover:bg-green-600 focus:outline-1 focus-visible:outline-1 focus:outline focus-visible:outline
+                        focus:outline-[-webkit-focus-ring-color] focus-visible:outline-[-webkit-focus-ring-color]
+                        drop-shadow-lg min-w-[100px] disabled:bg-green-300 disabled:text-neutral-900 disabled:cursor-not-allowed"
+        >Produce</button>
+    </div>
+</timer-component>
