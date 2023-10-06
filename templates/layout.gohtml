@@ -14,7 +14,7 @@
             <title>Consumption-O-Meter</title>
 
             {{ if eq environment "production" }}
-            <link rel="stylesheet" href="/dist/style.css">
+            <link rel="stylesheet" href="/dist/application.css">
             <link rel="manifest" href="/dist/manifest.json">
             {{ end }}
         </head>
@@ -24,8 +24,7 @@
             {{ template "timer-app" . }}
 
             {{ if eq environment "production" }}
-            <script type="module" src="/dist/consuption-meter.js"></script>
-            <script type="javascript" src="/dist/consuption-meter.umd.cjs"></script>
+            <script type="module" src="/dist/application.js"></script>
             {{ else }}
             <script type="module" src="http://localhost:5173/client/application.ts"></script>
             {{ end }}
