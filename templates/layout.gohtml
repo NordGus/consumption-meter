@@ -3,15 +3,32 @@
     <html lang="en">
         <head>
             <meta charset="UTF-8" />
+
+            {{ if eq environment "production" }}
+            <link rel="icon" type="image/svg" href="/dist/vite.svg" />
+            {{ else }}
             <link rel="icon" type="image/svg+xml" href="http://localhost:5173/vite.svg" />
+            {{ end }}
+
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title>Consumption-O-Meter</title>
+
+            {{ if eq environment "production" }}
+            <link rel="stylesheet" href="/dist/style.css">
+            <link rel="manifest" href="/dist/manifest.json">
+            {{ end }}
         </head>
         <body
                 class="m-0 flex flex-col h-screen bg-neutral-200 dark:bg-stone-800 text-neutral-900 dark:text-neutral-100"
         >
             {{ template "timer-app" . }}
+
+            {{ if eq environment "production" }}
+            <script type="module" src="/dist/consuption-meter.js"></script>
+            <script type="javascript" src="/dist/consuption-meter.umd.cjs"></script>
+            {{ else }}
             <script type="module" src="http://localhost:5173/client/application.ts"></script>
+            {{ end }}
         </body>
     </html>
 {{ end }}

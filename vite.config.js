@@ -3,11 +3,18 @@ import path from "path";
 
 export default defineConfig({
   build: {
+    lib: {
+      entry: "client/application.ts",
+      name: "application",
+    },
     outDir: "dist",
     manifest: true,
   },
   feature: {},
   plugins: [],
+  css: {
+    postcss: "./postcss.config.js",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client"),

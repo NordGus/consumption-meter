@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"flag"
 	"fmt"
 	"github.com/NordGus/consuption-meter/server/timings"
 	"github.com/go-chi/chi/v5"
@@ -15,8 +16,14 @@ import (
 )
 
 var (
+	environment *string
+	port        *int
+
 	//go:embed templates
 	templates embed.FS
+
+	//go:embed dist
+	bundle embed.FS
 
 	templatePatterns = []string{
 		"templates/layout.gohtml",
@@ -28,8 +35,9 @@ var (
 	}
 
 	helpers = template.FuncMap{
-		"creates":    func(timing timings.Timing) bool { return timing.Type == timings.Create },
-		"formatTime": func(t time.Time) string { return t.Format("02/01/06 - 15:04:05") },
+		"creates":     func(timing timings.Timing) bool { return timing.Type == timings.Create },
+		"formatTime":  func(t time.Time) string { return t.Format("02/01/06 - 15:04:05") },
+		"environment": func() string { return *environment },
 		"humanizeDuration": func(d time.Duration) string {
 			var (
 				ms  = d.Milliseconds()
@@ -68,10 +76,16 @@ var (
 	timingsPage = timings.NewPage()
 )
 
+func init() {
+	environment = flag.String("env", "development", "deployment environment")
+	port = flag.Int("port", 4269, "port where the application listens")
+
+	flag.Parse()
+}
+
 func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
-	router.Use(devCORSMiddleware)
 
 	router.Get("/", func(writer http.ResponseWriter, _ *http.Request) {
 		tmpl, err := template.New("layout").Funcs(helpers).ParseFS(templates, templatePatterns...)
@@ -94,18 +108,13 @@ func main() {
 		handleTiming(writer, timings.Consume)
 	})
 
-	err := http.ListenAndServe(":4269", router)
+	//router.Get("/dist", http.RedirectHandler("/dist/", http.StatusMovedPermanently).ServeHTTP)
+	router.Get("/dist/*", http.FileServer(http.FS(bundle)).ServeHTTP)
+
+	err := http.ListenAndServe(fmt.Sprintf(":%v", *port), router)
 	if err != nil {
 		log.Fatalf("something went wrong initalizing http server: %v\n", err)
 	}
-}
-
-func devCORSMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-
-		next.ServeHTTP(writer, request)
-	})
 }
 
 func handleTiming(writer http.ResponseWriter, action timings.Action) {
