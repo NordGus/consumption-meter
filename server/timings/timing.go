@@ -6,8 +6,9 @@ import (
 )
 
 var (
-	ErrTimingAlreadyStopped = errors.New("timings: timing already stopped")
-	ErrInvalidAction        = errors.New("timings: invalid action")
+	ErrTimingNotStopped       = errors.New("timings: there's another timing running")
+	ErrTimingAlreadyStopped   = errors.New("timings: timing already stopped")
+	ErrDifferentActionRunning = errors.New("timings: another action's timing is running")
 )
 
 type Timing struct {
@@ -15,47 +16,42 @@ type Timing struct {
 	Start    time.Time
 	Stop     time.Time
 	Duration time.Duration
-	Type     Action
+	Type     action
 }
 
-func (page *Page) CreateTiming(action Action) {
+func startTiming(action action) error {
+	if isRunning {
+		return ErrTimingNotStopped
+	}
+
 	t := Timing{
-		ID:    page.timingID,
+		ID:    timingID,
 		Start: time.Now(),
 		Type:  action,
 	}
 
-	page.isRunning = true
-	page.timings = append(page.timings, t)
-	page.timingID++
+	isRunning = true
+	timings = append(timings, t)
+	timingID++
+
+	return nil
 }
 
-func (page *Page) CanCreateTiming() bool {
-	return !page.isRunning
-}
-
-func (page *Page) CanStopTiming(action Action) bool {
-	lastIDX := len(page.timings) - 1
-
-	if lastIDX < 0 || !page.isRunning {
-		return false
-	}
-
-	return page.timings[lastIDX].Type == action
-}
-
-func (page *Page) StopTiming() error {
-	if !page.isRunning {
+func stopTiming() error {
+	if !isRunning {
 		return ErrTimingAlreadyStopped
 	}
 
-	lastIDX := len(page.timings) - 1
+	var (
+		idx = len(timings) - 1
+	)
 
-	page.timings[lastIDX].Stop = time.Now()
-	page.timings[lastIDX].Duration = time.Since(page.timings[lastIDX].Start)
-	page.isRunning = false
+	timings[idx].Stop = time.Now()
+	timings[idx].Duration = timings[idx].Stop.Sub(timings[idx].Start)
 
-	page.CalculateTotalTime()
+	calculateTotalTime()
+
+	isRunning = false
 
 	return nil
 }

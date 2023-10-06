@@ -1,5 +1,5 @@
 {{ define "timer-app" }}
-    <div id="app" class="flex-1 p-5 grid grid-cols-1 grid-rows-layout max-w-[420px] max-h-screen">
+    <div id="app" class="flex-1 p-5 m-auto grid grid-cols-1 grid-rows-layout w-full max-w-[420px] max-h-screen lg:max-h-[95vh] lg:rounded-md lg:drop-shadow-lg bg-neutral-100 dark:bg-stone-800">
         {{ template "total" . }}
         <tab-view data-name="timer" class="my-10 flex flex-col">
             {{ template "timer" . }}
