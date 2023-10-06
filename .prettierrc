@@ -1,8 +1,5 @@
 {
   "singleQuote": false,
   "bracketSpacing": true,
-  "printWidth": 120,
-  "globals": {
-    "__dirname": true
-  }
+  "printWidth": 120
 }
